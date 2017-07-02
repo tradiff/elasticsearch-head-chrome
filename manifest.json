@@ -1,0 +1,20 @@
+{
+   "manifest_version": 2,
+   "name": "ElasticSearch Head",
+   "version": "0.1.0",
+   "description": "ElasticSearch Head",
+   "icons": {
+      "16": "icons/logo16.png"
+   },
+   "browser_action": {
+      "default_icon": {
+         "16": "icons/logo16.png"
+      }
+   },
+   "background": {
+      "scripts": [ "src/background.js" ]
+   },
+   "content_security_policy": "script-src 'self' 'sha256-Rpn+rjJuXCjZBPOPhhVloRXuzAUBRnAas+6gKVDohs0=';object-src 'self';",
+   "permissions": ["http://*/*", "https://*/*"],
+   "update_url": "https://clients2.google.com/service/update2/crx"
+}
