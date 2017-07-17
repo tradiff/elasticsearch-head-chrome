@@ -8,10 +8,13 @@ This was created because ElasticSearch 5 removed the ability to run ElasticSearc
 
 ## Installation
 
-1. Clone this repo.
-2. Open the [chrome extensions](chrome://extensions/) 
-3. Tick "Developer Mode"
-4. Click "Load unpacked extension..." and browse to the folder containing manifest.json
+Head over to [ElasticSearch Head](https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm) page on the Chrome Web Store.
+
+## Usage
+
+1. Click the extension icon in the toolbar of your web browser.
+2. Type the address for your elastic node into the top of the new tab that opened.
+3. Click the Connect button.
 
 ## Contact
 [@hamburger_menu](https://twitter.com/hamburger_menu)
