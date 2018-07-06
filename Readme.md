@@ -29,7 +29,7 @@ To make this more convenient to use (ie: without having to enter in the remote E
 
 * If you have multiple remote ES clusters that you often connect to, making a folder in your bookmark bar, and then having each ES cluster can look pretty snazzy:
  
-	   ![](doc/multiple-es-head-bookmarks.png)
+![](doc/multiple-es-head-bookmarks.png)
 
 ## Contact
 [@hamburger_menu](https://twitter.com/hamburger_menu)
