@@ -4,11 +4,20 @@ Chrome Extension containing the excellent [ElasticSearch Head](https://github.co
 
 ## Motivation
 
-This was created because ElasticSearch 5 removed the ability to run ElasticSearch Head as an Elastic Plugin.  This offers an alternative to self-hosting in your own web server.  It also has the advantage of bypassing CORS without configuring CORS on your Elastic server.
+This was created because ElasticSearch 5 removed the ability to run ElasticSearch Head as an Elastic Plugin.  This offers an alternative to self-hosting in your own web server.  It also has the advantage of bypassing CORS without configuring CORS on your Elastic server, except in future version of Google Chrome
 
 ## Installation
 
 Head over to [ElasticSearch Head](https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm) page on the Chrome Web Store.
+
+## CORS
+
+Google Chrome 75+ will block this extension unless you configure CORS on your Elastic server. To do so you just need to add the following lines to your `elasticsearch.yml`.
+
+```
+http.cors.enabled: true
+http.cors.allow-origin: chrome-extension://ffmkiejjmecolpfloofpjologoblkegm
+```
 
 ## Usage
 
