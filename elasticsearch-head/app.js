@@ -101,21 +101,21 @@
 			this.y = isFinite(x.y) ? x.y : (isFinite(x.top) ? x.top : (isFinite(y) ? y : 0));
 			this.x = isFinite(x.x) ? x.x : (isFinite(x.left) ? x.left : (isFinite(x) ? x : 0));
 		},
-		
+
 		add : function(i, j) {
 			var d = acx.vector(i, j);
 			return new this.Init(this.x + d.x, this.y + d.y);
 		},
-		
+
 		sub : function(i, j) {
 			var d = acx.vector(i, j);
 			return new this.Init(this.x - d.x, this.y - d.y);
 		},
-		
+
 		addX : function(i) {
 			return new this.Init(this.x + i, this.y);
 		},
-		
+
 		addY : function(j) {
 			return new this.Init(this.x, this.y + j);
 		},
@@ -123,17 +123,17 @@
 		mod : function(fn) { // runs a function against the x and y values
 			return new this.Init({x: fn.call(this, this.x, "x"), y: fn.call(this, this.y, "y")});
 		},
-		
+
 		/** returns true if this is within a rectangle formed by the points p and q */
 		within : function(p, q) {
 			return ( this.x >= ((p.x < q.x) ? p.x : q.x) && this.x <= ((p.x > q.x) ? p.x : q.x) &&
 					this.y >= ((p.y < q.y) ? p.y : q.y) && this.y <= ((p.y > q.y) ? p.y : q.y) );
 		},
-		
+
 		asOffset : function() {
 			return { top: this.y, left: this.x };
 		},
-		
+
 		asSize : function() {
 			return { height: this.y, width: this.x };
 		}
@@ -181,7 +181,7 @@
 			}
 			return ret;
 		},
-		
+
 		'remove' : function(value) {
 			var i = this.indexOf(value);
 			if(i !== -1) {
@@ -219,7 +219,7 @@
 			}
 			return ret;
 		},
-		
+
 		'zeroPad' : function(len) {
 			return ("0000000000" + this).substring(this.length - len + 10);
 		}
@@ -269,7 +269,7 @@
 		initializing = true;
 		var prototype = new this();
 		initializing = false;
-		
+
 		var _super = this.prototype;
 		prototype._proto = function() {
 			return _super;
@@ -437,7 +437,7 @@
 
 		init: function(options) {
 			this._super(); // call the class initialiser
-		
+
 			this.drag_handler = this.drag.bind(this);
 			this.drop_handler = this.drop.bind(this);
 			this.pickup_handler = this.pickup.bind(this);
@@ -474,7 +474,7 @@
 				this.fire('dragOver', this.currentTarget[0]);
 			}
 		},
-		
+
 		drop : function(jEv) {
 			$(document).unbind("mousemove", this.drag_handler);
 			$(document).unbind("mouseup", this.drop_handler);
@@ -486,7 +486,7 @@
 			this.fire('dragStop', jEv);
 			this.dragObj = null;
 		},
-		
+
 		pickup : function(jEv, opts) {
 			$.extend(this.config, opts);
 			this.fire('dragStart', jEv);
@@ -595,7 +595,7 @@
 			data: function( DataSourceInterface )
 		 */
 		_getSummary: function(res) {
-			this.summary = i18n.text("TableResults.Summary", res._shards.successful, res._shards.total, res.hits.total, (res.took / 1000).toFixed(3));
+			this.summary = i18n.text("TableResults.Summary", res._shards.successful, res._shards.total, (typeof res.hits.total === 'object') ? res.hits.total.value : res.hits.total, (res.took / 1000).toFixed(3));
 		},
 		_getMeta: function(res) {
 			this.meta = { total: res.hits.total, shards: res._shards, tool: res.took };
@@ -775,7 +775,7 @@
 						if ("properties" in prop[n]) {
 							procPath( prop[ n ].properties, path.concat( n ) );
 						} else {
-							var field = createField(prop[n], index, type, path.concat(n), n);							
+							var field = createField(prop[n], index, type, path.concat(n), n);
 							listeners.forEach( function( listener ) {
 								listener[ field.field_name ] = field;
 							} );
@@ -815,7 +815,7 @@
 		}
 	});
 
-})( this.app );	
+})( this.app );
 
 (function( app ) {
 
@@ -833,12 +833,12 @@
 				this.metaData = new app.data.MetaData({state: data});
 				this.fire("ready", this.metaData,  { originalData: data, "k": 1 }); // TODO originalData needed for legacy ui.FilterBrowser
 			}.bind(this), function() {
-				
+
 				var _this = this;
-				
+
 				_cluster.get("_all", function( data ) {
 					clusterState = {routing_table:{indices:{}}, metadata:{indices:{}}};
-					
+
 					for(var k in data) {
 						clusterState["routing_table"]["indices"][k] = {"shards":{"1":[{
                             "state":"UNASSIGNED",
@@ -848,7 +848,7 @@
                             "shard":'?',
                             "index":k
                         }]}};
-						
+
 
 						clusterState["metadata"]["indices"][k] = {};
 						clusterState["metadata"]["indices"][k]["mappings"] = data[k]["mappings"];
@@ -856,10 +856,10 @@
 						clusterState["metadata"]["indices"][k]["settings"] = data[k]["settings"];
 						clusterState["metadata"]["indices"][k]["fields"] = {};
 					}
-					
+
 					_this.metaData = new app.data.MetaData({state: clusterState});
 					_this.fire("ready", _this.metaData, {originalData: clusterState});
-				});				
+				});
 
 			}.bind(this));
 		}
@@ -968,14 +968,14 @@
 						if (typeof indexToTypeToParentIdToHit[doc._index] == "undefined"){
 						indexToTypeToParentIdToHit[doc._index] = new Object();
 					}
-					
+
 					if (typeof indexToTypeToParentIdToHit[doc._index][doc._type] == "undefined"){
 						indexToTypeToParentIdToHit[doc._index][doc._type] = new Object();
 					}
-					
+
 					indexToTypeToParentIdToHit[doc._index][doc._type][doc._id] = doc;
 					});
-					
+
 					res.hits.hits.forEach(function(hit) {
 						if (typeof hit.fields != "undefined"){
 							if (typeof hit.fields._parent != "undefined"){
@@ -1233,7 +1233,7 @@
 
 })( this.app );
 (function( app ) {
-	
+
 	var ux = app.ns("ux");
 	var services = app.ns("services");
 
@@ -1351,10 +1351,10 @@
 				clusterState = data;
 				updateModel.call( self );
 			},function() {
-				
+
 				_cluster.get("_all", function( data ) {
 					clusterState = {routing_table:{indices:{}}, metadata:{indices:{}}};
-					
+
 					for(var k in data) {
 						clusterState["routing_table"]["indices"][k] = {"shards":{"1":[{
                             "state":"UNASSIGNED",
@@ -1364,17 +1364,17 @@
                             "shard":'?',
                             "index":k
                         }]}};
-						
+
 
 						clusterState["metadata"]["indices"][k] = {};
 						clusterState["metadata"]["indices"][k]["mappings"] = data[k]["mappings"];
 						clusterState["metadata"]["indices"][k]["aliases"] = $.makeArray(Object.keys(data[k]["aliases"]));
 						clusterState["metadata"]["indices"][k]["settings"] = data[k]["settings"];
 					}
-					
+
 					updateModel.call( self );
 				});
-				
+
 			});
 			this.cluster.get("_stats", function( data ) {
 				status = data;
@@ -2208,14 +2208,14 @@
 			this.attach(parent);
 			this.el.click(this._click_handler);
 		},
-		
+
 		_click_handler: function(jEv) {
 			var t = $(jEv.target).closest(".uiJsonPretty-name").closest("LI");
 			if(t.length === 0 || t.parents(".uiJsonPretty-minimised").length > 0) { return; }
 			t.toggleClass("uiJsonPretty-minimised");
 			jEv.stopPropagation();
 		},
-		
+
 		_main_template: function() {
 			try {
 					return { tag: "DIV", cls: "uiJsonPretty", children: this.pretty.parse(this.config.obj) };
@@ -2223,7 +2223,7 @@
 					throw "JsonPretty error: " + error.message;
 			}
 		},
-		
+
 		pretty: { // from https://github.com/RyanAmos/Pretty-JSON/blob/master/pretty_json.js
 			"expando" : function(value) {
 				return (value && (/array|object/i).test(value.constructor.name)) ? "expando" : "";
@@ -2546,7 +2546,7 @@
 					section.body.append(this._booleanFilter_template(spec));
 				} else if (spec.core_type === 'multi_field') {
 					section.body.append(this._multiFieldFilter_template(section, spec));
-				} 
+				}
 				section.loaded = true;
 			}
 			section.on("animComplete", function(section) { section.body.find("INPUT").focus(); });
@@ -2729,7 +2729,7 @@
 					});
 				}, this)
 			};
-		}	
+		}
 	});
 
 })( this.jQuery, this.app, this.i18n );
@@ -3041,7 +3041,7 @@
 			] };
 		}
 	});
-	
+
 })( this.jQuery, this.app, this.i18n, this.Raphael );
 
 (function( app, i18n, joey ) {
@@ -3349,7 +3349,7 @@
 	var ui = app.ns("ui");
 	var services = app.ns("services");
 
-	// ( master ) master = true, data = true 
+	// ( master ) master = true, data = true
 	// ( coordinator ) master = true, data = false
 	// ( worker ) master = false, data = true;
 	// ( client ) master = false, data = false;
@@ -3775,7 +3775,7 @@
 			this.el = $.joey(this._main_template());
 			this.cluster.get( "", this._node_handler );
 		},
-		
+
 		_node_handler: function(data) {
 			if(data) {
 				this.prefs.set("app-base_uri", this.cluster.base_uri);
@@ -3783,12 +3783,27 @@
 					this.cluster.setVersion(data.version.number);
 			}
 		},
-		
+
 		_reconnect_handler: function() {
 			var base_uri = this.el.find(".uiClusterConnect-uri").val();
-			$("body").empty().append(new app.App("body", { id: "es", base_uri: base_uri }));
+			var url;
+			if(base_uri.indexOf("?") !== -1) {
+				url = base_uri.substring(0, base_uri.indexOf("?")-1);
+			} else {
+				url = base_uri;
+			}
+			var argstr = base_uri.substring(base_uri.indexOf("?")+1, base_uri.length);
+			var args = argstr.split("&").reduce(function(r, p) {
+				r[decodeURIComponent(p.split("=")[0])] = decodeURIComponent(p.split("=")[1]);
+				return r;
+			}, {});
+			$("body").empty().append(new app.App("body", { id: "es",
+				base_uri: url,
+			 	auth_user : args["auth_user"] || "",
+			 	auth_password : args["auth_password"] || ""
+			}));
 		},
-		
+
 		_main_template: function() {
 			return { tag: "SPAN", cls: "uiClusterConnect", children: [
 				{ tag: "INPUT", type: "text", cls: "uiClusterConnect-uri", onkeyup: function( ev ) {
@@ -3825,7 +3840,7 @@
 			this.out = this.el.find("DIV.uiStructuredQuery-out");
 			this.attach( parent );
 		},
-		
+
 		_indexChanged_handler: function( index ) {
 			this.filter && this.filter.remove();
 			this.filter = new ui.FilterBrowser({
@@ -3837,7 +3852,7 @@
 			});
 			this.el.find(".uiStructuredQuery-body").append(this.filter);
 		},
-		
+
 		_results_handler: function( filter, event ) {
 			var typeMap = {
 				"json": this._jsonResults_handler,
@@ -3862,7 +3877,7 @@
 			} ).attach(this.out.empty());
 			qdi._results_handler(qdi.config.query, results);
 		},
-		
+
 		_showRawJSON : function() {
 			if($("#rawJsonText").length === 0) {
 				var hiddenButton = $("#showRawJSON");
@@ -3871,7 +3886,7 @@
 				hiddenButton.parent().append(jsonText);
 			}
 		},
-		
+
 		_searchSource_handler: function(src) {
 			var searchSourceDiv = this.el.find("DIV.uiStructuredQuery-src");
 			searchSourceDiv.empty().append(new app.ui.JsonPretty({ obj: src }));
@@ -3881,7 +3896,7 @@
 			}
 			searchSourceDiv.show();
 		},
-		
+
 		_main_template: function() {
 			return { tag: "DIV", cls: this._baseCls, children: [
 				this.selector,
@@ -3933,14 +3948,13 @@
 						scan_properties(path.concat(prop), obj.properties[prop]);
 					}
 				} else {
-					// handle multi_field 
+					// handle multi_field
 					if (obj.fields) {
 						for (var subField in obj.fields) {
 							filters.push({ path: (path[path.length - 1] !== subField) ? path.concat(subField) : path, type: obj.fields[subField].type, meta: obj.fields[subField] });
 						}
-					} else {
-						filters.push({ path: path, type: obj.type, meta: obj });
 					}
+					filters.push({ path: path, type: obj.type, meta: obj });
 				}
 			}
 			if (data[this.config.index]){
@@ -3962,18 +3976,18 @@
 
 			this._addFilterRow_handler();
 		},
-		
+
 		_addFilterRow_handler: function() {
 			this.filtersEl.append(this._filter_template());
 		},
-		
+
 		_removeFilterRow_handler: function(jEv) {
 			$(jEv.target).closest("DIV.uiFilterBrowser-row").remove();
 			if(this.filtersEl.children().length === 0) {
 				this._addFilterRow_handler();
 			}
 		},
-		
+
 		_search_handler: function() {
 			var search = new data.BoolQuery();
 			search.setSize( this.el.find(".uiFilterBrowser-outputSize").val() )
@@ -4014,12 +4028,12 @@
 			}
 			this._cluster.post( this.config.index + "/_search", search.getData(), this._results_handler );
 		},
-		
+
 		_results_handler: function( data ) {
 			var type = this.el.find(".uiFilterBrowser-outputFormat").val();
 			this.fire("results", this, { type: type, data: data, metadata: this.metadata });
 		},
-		
+
 		_changeQueryField_handler: function(jEv) {
 			var select = $(jEv.target);
 			var spec = select.children(":selected").data("spec");
@@ -4029,7 +4043,7 @@
 			} else if(spec.type === '_all') {
 				ops = ["query_string"];
 			} else if(spec.type === 'string' || spec.type === 'text' || spec.type === 'keyword') {
-				ops = ["term", "wildcard", "prefix", "fuzzy", "range", "query_string", "text", "missing"];
+				ops = ["match", "term", "wildcard", "prefix", "fuzzy", "range", "query_string", "text", "missing"];
 			} else if(spec.type === 'long' || spec.type === 'integer' || spec.type === 'float' ||
 					spec.type === 'byte' || spec.type === 'short' || spec.type === 'double') {
 				ops = ["term", "range", "fuzzy", "query_string", "missing"];
@@ -4045,11 +4059,11 @@
 			select.after({ tag: "SELECT", cls: "op", onchange: this._changeQueryOp_handler, children: ops.map(ut.option_template) });
 			select.next().change();
 		},
-		
+
 		_changeQueryOp_handler: function(jEv) {
 			var op = $(jEv.target), opv = op.val();
 			op.siblings().remove(".qual,.range,.fuzzy");
-			if(opv === 'term' || opv === 'wildcard' || opv === 'prefix' || opv === "query_string" || opv === 'text') {
+			if(opv === 'match' || opv === 'term' || opv === 'wildcard' || opv === 'prefix' || opv === "query_string" || opv === 'text') {
 				op.after({ tag: "INPUT", cls: "qual", type: "text" });
 			} else if(opv === 'range') {
 				op.after(this._range_template());
@@ -4057,7 +4071,7 @@
 				op.after(this._fuzzy_template());
 			}
 		},
-		
+
 		_main_template: function() {
 			return { tag: "DIV", children: [
 				{ tag: "DIV", cls: "uiFilterBrowser-filters" },
@@ -4077,7 +4091,7 @@
 				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "uiFilterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
 			]};
 		},
-		
+
 		_filter_template: function() {
 			return { tag: "DIV", cls: "uiFilterBrowser-row", children: [
 				{ tag: "SELECT", cls: "bool", children: ["must", "must_not", "should"].map(ut.option_template) },
@@ -4088,7 +4102,7 @@
 				{ tag: "BUTTON", type: "button", text: "-", onclick: this._removeFilterRow_handler }
 			]};
 		},
-		
+
 		_range_template: function() {
 			return { tag: "SPAN", cls: "range", children: [
 				{ tag: "SELECT", cls: "lowop", children: ["gt", "gte"].map(ut.option_template) },
@@ -4106,7 +4120,7 @@
 			]};
 		}
 	});
-	
+
 })( this.jQuery, this.app, this.i18n );
 
 (function( $, app, i18n ) {
@@ -4124,18 +4138,18 @@
 		update: function() {
 			this.cluster.get( "_stats", this._update_handler );
 		},
-		
+
 		_update_handler: function(data) {
 			var options = [];
 			var index_names = Object.keys(data.indices).sort();
-			for(var i=0; i < index_names.length; i++) { 
+			for(var i=0; i < index_names.length; i++) {
 				name = index_names[i];
-				options.push(this._option_template(name, data.indices[name])); 
+				options.push(this._option_template(name, data.indices[name]));
 			}
 			this.el.find(".uiIndexSelector-select").empty().append(this._select_template(options));
 			this._indexChanged_handler();
 		},
-		
+
 		_main_template: function() {
 			return { tag: "DIV", cls: "uiIndexSelector", children: i18n.complex( "IndexSelector.SearchIndexForDocs", { tag: "SPAN", cls: "uiIndexSelector-select" } ) };
 		},
@@ -4147,7 +4161,7 @@
 		_select_template: function(options) {
 			return { tag: "SELECT", children: options, onChange: this._indexChanged_handler };
 		},
-		
+
 		_option_template: function(name, index) {
 			return  { tag: "OPTION", value: name, text: i18n.text("IndexSelector.NameWithDocs", name, index.primaries.docs.count ) };
 		}
@@ -4230,7 +4244,7 @@
 })( this.jQuery, this.app, this.i18n );
 
 (function( $, app, i18n ) {
-	
+
 	var ui = app.ns("ui");
 	var ut = app.ns("ut");
 
@@ -4473,7 +4487,7 @@
 				this.$body
 			]};
 		}
-		
+
 	});
 
 })( this.app, this.i18n );
