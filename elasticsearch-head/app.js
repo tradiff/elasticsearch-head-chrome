@@ -3990,7 +3990,15 @@
 
 		_search_handler: function() {
 			var search = new data.BoolQuery();
-			search.setSize( this.el.find(".uiFilterBrowser-outputSize").val() )
+            var searchOutputSize = this.el.find(".uiFilterBrowser-outputSize").val();
+            if (searchOutputSize === "Custom") {
+                searchOutputSize = 10;
+                var num = prompt(i18n.text("FilterBrowser.CustomOutputSize"), "10000");
+                if (num != null && !isNaN(parseInt(num))) {
+                    searchOutputSize = num;
+                }
+            }
+            search.setSize(searchOutputSize)
 			this.fire("startingSearch");
 			this.filtersEl.find(".uiFilterBrowser-row").each(function(i, row) {
 				row = $(row);
@@ -4085,7 +4093,7 @@
 				},
 				{ tag: "LABEL", children:
 					i18n.complex("FilterBrowser.OutputSize", { tag: "SELECT", cls: "uiFilterBrowser-outputSize",
-						children: [ "10", "50", "250", "1000", "5000", "25000" ].map( ut.option_template )
+                        children: ["10", "50", "250", "1000", "5000", "25000", "Custom" ].map( ut.option_template )
 					} )
 				},
 				{ tag: "LABEL", children: [ { tag: "INPUT", type: "checkbox", cls: "uiFilterBrowser-showSrc" }, i18n.text("Output.ShowSource") ] }
