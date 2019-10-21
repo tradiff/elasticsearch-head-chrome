@@ -3993,7 +3993,7 @@
             var searchOutputSize = this.el.find(".uiFilterBrowser-outputSize").val();
             if (searchOutputSize === "Custom") {
                 searchOutputSize = 10;
-                var num = prompt("Please enter the number of records required", "10000");
+                var num = prompt(i18n.text("FilterBrowser.CustomOutputSize"), "10000");
                 if (num != null && !isNaN(parseInt(num))) {
                     searchOutputSize = num;
                 }
